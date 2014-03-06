@@ -11,8 +11,7 @@ import multiprocessing
 
 class WorkerManager():
 
-    def __init__(self, worker_status):
-        self.worker_status = worker_status
+    def __init__(self):
         self.process_hash = dict()
         pass
 
