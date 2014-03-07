@@ -6,6 +6,16 @@ import re
 def is_number(num_str):
     try:
         int(num_str)
+        float(num_str)
+        return True
+    except ValueError:
+        return False
+    pass
+
+
+def is_int(num_str):
+    try:
+        int(num_str)
         return True
     except ValueError:
         return False

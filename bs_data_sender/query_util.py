@@ -4,62 +4,48 @@ import datetime
 
 
 def change_datetime2string(value):
-    """
-    데이터 타입별로 처리해서 string으로 변환
-    """
+    result = None
     if isinstance(value, datetime):
-        return " '"+value.strftime("%Y-%m-%d %H:%M:%S")+"' "
-    elif isnumber(v):
-         query += str(v)
-    elif isinstance(v, str):
-        if len(v) == 0:
-            return "Null"
-        else:
-            return " '"+str(v)+"' "
-    elif isinstance(v, unicode):
-        return " '"+str(v)+"' "
-    elif v is None:
-        return "Null"
+        result = " '"+value.strftime("%Y-%m-%d %H:%M:%S")+"' "
+    elif isinstance(value, int) or isinstance(value, float):
+        result = str(value)
+    elif isinstance(value, str) or isinstance(value, unicode):
+        result = " '"+str(value)+"' "
+    elif value is None or len(value) == 0:
+        result = " Null "
     else:
-        return str(v)
-    pass
+        result = str(value)
+    return result
 
-#def generateQueryByDict(tableName, csvRaw):
-def generate_query_by_dict(table_name, dict_data):
-    """
-    딕셔너리에서 쿼리생성
-    """
+
+def generate_insert_query_by_dict(table_name, dict_data):
     query = 'insert into '+table_name+' ('
     length = len(dict_data.keys())-1
-    for idx, k in enumerate(dict_data.keys()):
-        query += k
-        if idx >= length:
-            break
-        query += ', '
-        pass
+    query += ", ".join(dict_data.keys())
+    #for idx, k in enumerate(dict_data.keys()):
+    #    query += k
+    #    if idx >= length:
+    #        break
+    #    query += ', '
+    #    pass
     query += ') values ('
-    for idx, v in enumerate(csvRaw.values()):
-        # print idx, v, isinstance(v, str), type(v)
-        query += quoteInsertByDataType(v)
-
+    #query += ", ".join(change_datetime2string(dict_data.values()))
+    for idx, v in enumerate(dict_data.values()):
+        query += change_datetime2string(v)
         if idx >= length:
             break
         query += ', '
         pass
-    pass
     query += ')'
     return query
 
 
 def generateUpdateQueryUsingDict(tableName, csvRaw):
-    """
-    딕셔너리에서 업데이트 쿼리생성
-    """
-    query = 'update '+table_name_prefix+tableName+' set '
+    query = 'update '+tableName+' set '
     # for k, v in csvRaw.iteritems():
     for idx, key in enumerate(csvRaw.keys()):
 
-        query += " " + str(key) + " = "+quoteInsertByDataType(csvRaw[key])
+        query += " " + str(key) + " = "+change_datetime2string(csvRaw[key])
 
         if idx >= len(csvRaw.keys())-1:
             break
@@ -73,7 +59,7 @@ def generateUpdateQueryUsingDict(tableName, csvRaw):
 
 def generateUpsertQuery(tableName, csvRaw):
 
-    insert = "INSERT INTO "+table_name_prefix+tableName+" ("
+    insert = "INSERT INTO "+tableName+" ("
     for idx, key in enumerate(csvRaw.keys()):
         insert += key
         if idx >= len(csvRaw.keys())-1:
@@ -82,7 +68,7 @@ def generateUpsertQuery(tableName, csvRaw):
         insert += ", "
     insert += "SELECT "
     for idx, key in enumerate(csvRaw.keys()):
-        insert += quoteInsertByDataType(csvRaw[key])
+        insert += change_datetime2string(csvRaw[key])
         if idx >= len(csvRaw.keys())-1:
             break
         insert += ", "
@@ -105,7 +91,7 @@ SELECT COALESCE((SELECT 1 FROM try_create), (SELECT 1 FROM try_update))
 
 def batchInsert(tableName, csvRaw):
 
-    insert = "INSERT INTO "+table_name_prefix+tableName+" ("
+    insert = "INSERT INTO "+tableName+" ("
     for idx, key in enumerate(csvRaw.keys()):
         insert += key
         if idx >= len(csvRaw.keys())-1:
@@ -114,7 +100,7 @@ def batchInsert(tableName, csvRaw):
         insert += ", "
     insert += "SELECT "
     for idx, key in enumerate(csvRaw.keys()):
-        insert += quoteInsertByDataType(csvRaw[key])
+        insert += change_datetime2string(csvRaw[key])
         if idx >= len(csvRaw.keys())-1:
             break
         insert += ", "

@@ -171,16 +171,3 @@ class FtpSender():
     def chmod(self, path, permissionNumber):
         # self.remoteClient.chmod(path, permissionNumber)
         pass
-
-
-def main():
-
-    # site = config.domain.Site()
-    # remote = SftpSender(site)
-    # remote.upload("/Users/archmagece/data.txt", "/home/data.txt")
-    # remote.rename("/home/data.txt")
-
-    pass
-
-if __name__ == '__main__':
-    main()
