@@ -1,8 +1,9 @@
+import bs_data_sender
+
 __author__ = 'archmagece'
 
 import unittest
 
-import bs_data_sender.query_util
 
 class MyTestCase(unittest.TestCase):
     def test_something(self):
