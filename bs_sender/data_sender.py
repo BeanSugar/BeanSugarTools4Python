@@ -5,6 +5,7 @@ import logging
 
 import bs_sender.base_style
 import bs_sender.query_util
+from bs_sender.base_style import retry
 
 
 class PgSender(bs_sender.base_style.BSSender):
@@ -23,6 +24,7 @@ class PgSender(bs_sender.base_style.BSSender):
         #self.cursor = self.connection.cursor()
         pass
 
+    @retry
     def connect(self):
         connection = psycopg2.connect(database=self.database,
                                       user=self.username,

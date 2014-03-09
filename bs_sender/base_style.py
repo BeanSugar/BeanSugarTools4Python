@@ -1,7 +1,7 @@
 __author__ = 'archmagece'
 
 from abc import ABCMeta, abstractmethod
-
+import time
 
 class ConnectionInfo():
     def __init__(self, host, port, database, username, password, autocommit=True):
@@ -13,6 +13,28 @@ class ConnectionInfo():
         self.autocommit = autocommit
         pass
     pass
+
+
+def retry(retry_cnt=10, delay_sec=5, exception=Exception, runtime_exception=RuntimeError, log=None):
+    def decorator(fn):
+        def retrier(*args, **kwargs):
+            m_retry_cnt = retry_cnt
+            m_delay_sec = delay_sec
+            try_cnt = 0
+            while try_cnt < m_retry_cnt:
+                try:
+                    return fn(*args, **kwargs)
+                except exception as e:
+                    msg = "retry error %s, retry in %d seconds" % (str(e), m_delay_sec)
+                    if log:
+                        log.exception(msg)
+                    else:
+                        print msg
+                    time.sleep(delay_sec)
+                    try_cnt += 1
+            raise runtime_exception("runtime error")
+        return retrier
+    return decorator
 
 
 #class BSSender(metaclass=ABCMeta):
@@ -33,6 +55,7 @@ class BSSender():
         pass
 
     @abstractmethod
+    @retry
     def connect(self):
         pass
 
