@@ -3,12 +3,12 @@ __author__ = 'archmagece'
 import psycopg2
 import logging
 
-import bs_sender.base_style
-import bs_sender.query_util
-from bs_sender.base_style import retry
+import bs_data_sender.base_style
+import bs_data_sender.query_util
+from bs_data_sender.base_style import retry
 
 
-class PgSender(bs_sender.base_style.BSSender):
+class PgSender(bs_data_sender.base_style.BSSender):
 
     def __init__(self, connection_info, table_name, pk_fields_tuple=None):
         self.host = connection_info.host,
@@ -58,7 +58,7 @@ class PgSender(bs_sender.base_style.BSSender):
         pass
 
     def send_one(self, dict_value):
-        insert_query = bs_sender.query_util.generate_insert_query_by_dict(self.table_name, dict_value)
+        insert_query = bs_data_sender.query_util.generate_insert_query_by_dict(self.table_name, dict_value)
         self.cursor.execute(insert_query)
         logging.debug(self.table_name + " send dict_value")
         pass

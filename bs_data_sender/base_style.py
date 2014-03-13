@@ -3,6 +3,7 @@ __author__ = 'archmagece'
 from abc import ABCMeta, abstractmethod
 import time
 
+
 class ConnectionInfo():
     def __init__(self, host, port, database, username, password, autocommit=True):
         self.host = host

@@ -1,12 +1,12 @@
 __author__ = 'archmagece'
 
 
-import bs_sender.base_style
-import bs_sender.query_util
-from bs_sender.base_style import retry
+import bs_data_sender.base_style
+import bs_data_sender.query_util
+from bs_data_sender.base_style import retry
 
 
-class BSBokBoot(bs_sender.base_style.BSSender):
+class BSBokBoot(bs_data_sender.base_style.BSSender):
 
     def __init__(self, connection_info, table_name, pk_fields_tuple=None):
         self.host = connection_info.host
